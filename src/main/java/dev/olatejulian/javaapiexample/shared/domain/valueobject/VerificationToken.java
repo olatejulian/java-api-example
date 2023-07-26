@@ -8,6 +8,8 @@ import lombok.Getter;
 
 @EqualsAndHashCode
 public class VerificationToken {
+    private static final Integer VERIFICATION_TOKEN_LENGTH = 64;
+
     @Getter
     private String verificationToken;
 
@@ -18,7 +20,7 @@ public class VerificationToken {
     }
 
     public static VerificationToken generateVerificationToken() {
-        var randomString = RandomStringUtils.randomAlphanumeric(verificationTokenLength());
+        var randomString = RandomStringUtils.randomAlphanumeric(VERIFICATION_TOKEN_LENGTH);
 
         try {
             return new VerificationToken(randomString);
@@ -27,12 +29,8 @@ public class VerificationToken {
         }
     }
 
-    private static Integer verificationTokenLength() {
-        return 64;
-    }
-
     private static void validate(String verificationToken) throws InvalidVerificationTokenException {
-        if (verificationToken.length() != verificationTokenLength()) {
+        if (verificationToken.length() != VERIFICATION_TOKEN_LENGTH) {
             throw new InvalidVerificationTokenException("Invalid verification token length");
         }
 
