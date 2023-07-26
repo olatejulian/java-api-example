@@ -1,10 +1,9 @@
-package dev.olatejulian.javaapiexample.shared.valueobject;
+package dev.olatejulian.javaapiexample.shared.domain.valueobject;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import dev.olatejulian.javaapiexample.shared.domain.exception.InvalidaEmailAddressException;
-import dev.olatejulian.javaapiexample.shared.domain.valueobject.EmailAddress;
 
 public class EmailAddressTest {
     @Test
