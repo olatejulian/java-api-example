@@ -10,14 +10,34 @@ public class PasswordTest {
     void testPassword() {
         var validValue = "JohnDoePassword123";
 
-        Assertions.assertDoesNotThrow(() -> new Password(validValue, false));
+        Assertions.assertDoesNotThrow(() -> new Password(validValue));
     }
 
     @Test
     void testPasswordWhenInvalid() {
         var invalidValue = "123";
 
-        Assertions.assertThrows(InvalidPasswordException.class, () -> new Password(invalidValue, false));
+        Assertions.assertThrows(InvalidPasswordException.class, () -> new Password(invalidValue));
+    }
+
+    @Test
+    void testFromHashedString() {
+        Assertions.assertDoesNotThrow(() -> {
+            var hashedString = new Password("JohnDoePassword123").getPassword();
+
+            Password.fromHashedString(hashedString);
+        });
+
+    }
+
+    @Test
+    void testFromHashedStringWhenInvalid() {
+        Assertions.assertThrows(InvalidPasswordException.class, () -> {
+            var invalidHashedString = "123";
+
+            Password.fromHashedString(invalidHashedString);
+        });
+
     }
 
     @Test
@@ -26,7 +46,7 @@ public class PasswordTest {
 
         var wrongPasswordString = "JohnDoePassword1234";
 
-        var password = new Password(passwordString, false);
+        var password = new Password(passwordString);
 
         Assertions.assertTrue(password.compare(passwordString));
 
@@ -37,7 +57,7 @@ public class PasswordTest {
     void testGetPassword() throws InvalidPasswordException {
         var passwordString = "JohnDoePassword123";
 
-        var password = new Password(passwordString, false);
+        var password = new Password(passwordString);
 
         Assertions.assertNotNull(password.getPassword());
     }
