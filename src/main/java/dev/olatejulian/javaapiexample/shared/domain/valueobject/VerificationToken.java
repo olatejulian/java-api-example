@@ -11,12 +11,12 @@ public class VerificationToken {
     private static final Integer VERIFICATION_TOKEN_LENGTH = 64;
 
     @Getter
-    private String verificationToken;
+    private String token;
 
-    public VerificationToken(String verificationToken) throws InvalidVerificationTokenException {
-        validate(verificationToken);
+    public VerificationToken(String token) throws InvalidVerificationTokenException {
+        validate(token);
 
-        this.verificationToken = verificationToken;
+        this.token = token;
     }
 
     public static VerificationToken generateVerificationToken() {
@@ -30,13 +30,21 @@ public class VerificationToken {
     }
 
     private static void validate(String verificationToken) throws InvalidVerificationTokenException {
-        if (verificationToken.length() != VERIFICATION_TOKEN_LENGTH) {
-            throw new InvalidVerificationTokenException("Invalid verification token length");
-        }
+        Object[][] errors = {
+                {
+                        verificationToken == null || verificationToken.length() != VERIFICATION_TOKEN_LENGTH,
+                        String.format("Verification token must be %d characters long", VERIFICATION_TOKEN_LENGTH)
+                },
+                {
+                        verificationToken == null || !verificationToken.matches("[a-zA-Z0-9]+"),
+                        "Verification token must only contain alphanumeric characters"
+                }
+        };
 
-        if (!verificationToken.matches("[a-zA-Z0-9]+")) {
-            throw new InvalidVerificationTokenException("Invalid verification token characters");
+        for (Object[] error : errors) {
+            if ((boolean) error[0]) {
+                throw new InvalidVerificationTokenException((String) error[1]);
+            }
         }
     }
-
 }

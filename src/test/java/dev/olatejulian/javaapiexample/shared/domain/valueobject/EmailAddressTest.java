@@ -1,25 +1,30 @@
 package dev.olatejulian.javaapiexample.shared.domain.valueobject;
 
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 
 import dev.olatejulian.javaapiexample.shared.domain.exception.InvalidaEmailAddressException;
 
-public class EmailAddressTest {
+class EmailAddressTest {
     @Test
     void testConstructorWithValidValue() throws InvalidaEmailAddressException {
         var validEmailAddressString = "john.doe@email.com";
 
         var emailAddress = new EmailAddress(validEmailAddressString);
 
-        Assertions.assertNotNull(emailAddress);
+        assertNotNull(emailAddress);
     }
 
     @Test
     void testConstructorWithInvalidValue() {
         var invalidEmailAddressString = "invalid-email-address";
 
-        Assertions.assertThrows(InvalidaEmailAddressException.class, () -> {
+        assertThrows(InvalidaEmailAddressException.class, () -> {
             new EmailAddress(invalidEmailAddressString);
         });
     }
@@ -34,9 +39,13 @@ public class EmailAddressTest {
 
         var carlJacksonEmailAddress = new EmailAddress(carlJacksonEmailAddressString);
 
-        Assertions.assertTrue(johnDoeEmailAddress.equals(johnDoeEmailAddress));
+        var sameValue = johnDoeEmailAddress.equals(johnDoeEmailAddress);
 
-        Assertions.assertFalse(johnDoeEmailAddress.equals(carlJacksonEmailAddress));
+        assertTrue(sameValue);
+
+        var diffValue = johnDoeEmailAddress.equals(carlJacksonEmailAddress);
+
+        assertFalse(diffValue);
     }
 
     @Test
@@ -45,6 +54,6 @@ public class EmailAddressTest {
 
         var emailAddress = new EmailAddress(emailAddressString);
 
-        Assertions.assertEquals(emailAddressString, emailAddress.getEmailAddress());
+        assertEquals(emailAddressString, emailAddress.getAddress());
     }
 }

@@ -1,17 +1,29 @@
 package dev.olatejulian.javaapiexample.account.domain.valueobject;
 
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 
 import dev.olatejulian.javaapiexample.account.domain.exception.InvalidAccountNameException;
 
-public class AccountNameTest {
+class AccountNameTest {
     @Test
     void testConstructor() {
         var name = "test";
 
-        Assertions.assertDoesNotThrow(() -> new AccountName(name));
+        assertDoesNotThrow(() -> new AccountName(name));
 
+    }
+
+    @Test
+    void testConstructorWhenNameIsNull() {
+        String name = null;
+
+        assertThrows(InvalidAccountNameException.class, () -> new AccountName(name));
     }
 
     @Test
@@ -20,7 +32,7 @@ public class AccountNameTest {
 
         var value = new AccountName(name);
 
-        Assertions.assertEquals(name, value.getName());
+        assertEquals(name, value.getName());
     }
 
     @Test
@@ -29,13 +41,16 @@ public class AccountNameTest {
 
         var value = new AccountName(name);
 
-        Assertions.assertTrue(value.equals(value));
+        var sameValue = value.equals(value);
+
+        assertTrue(sameValue);
 
         var anotherName = "test2";
 
         var anotherAccountName = new AccountName(anotherName);
 
-        Assertions.assertFalse(value.equals(anotherAccountName));
-    }
+        var diffValue = value.equals(anotherAccountName);
 
+        assertFalse(diffValue);
+    }
 }

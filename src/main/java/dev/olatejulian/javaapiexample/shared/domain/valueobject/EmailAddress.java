@@ -9,12 +9,12 @@ import lombok.Getter;
 @EqualsAndHashCode
 public class EmailAddress {
     @Getter
-    private String emailAddress;
+    private String address;
 
-    public EmailAddress(String emailAddress) throws InvalidaEmailAddressException {
-        validate(emailAddress);
+    public EmailAddress(String address) throws InvalidaEmailAddressException {
+        validate(address);
 
-        this.emailAddress = emailAddress;
+        this.address = address;
     }
 
     private static void validate(String emailAddress) throws InvalidaEmailAddressException {

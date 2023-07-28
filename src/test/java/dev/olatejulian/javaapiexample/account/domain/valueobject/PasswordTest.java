@@ -1,29 +1,34 @@
 package dev.olatejulian.javaapiexample.account.domain.valueobject;
 
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 
 import dev.olatejulian.javaapiexample.account.domain.exception.InvalidPasswordException;
 
-public class PasswordTest {
+class PasswordTest {
     @Test
     void testPassword() {
         var validValue = "JohnDoePassword123";
 
-        Assertions.assertDoesNotThrow(() -> new Password(validValue));
+        assertDoesNotThrow(() -> new Password(validValue));
     }
 
     @Test
     void testPasswordWhenInvalid() {
         var invalidValue = "123";
 
-        Assertions.assertThrows(InvalidPasswordException.class, () -> new Password(invalidValue));
+        assertThrows(InvalidPasswordException.class, () -> new Password(invalidValue));
     }
 
     @Test
     void testFromHashedString() {
-        Assertions.assertDoesNotThrow(() -> {
-            var hashedString = new Password("JohnDoePassword123").getPassword();
+        assertDoesNotThrow(() -> {
+            var hashedString = new Password("JohnDoePassword123").getPasswordValue();
 
             Password.fromHashedString(hashedString);
         });
@@ -32,7 +37,7 @@ public class PasswordTest {
 
     @Test
     void testFromHashedStringWhenInvalid() {
-        Assertions.assertThrows(InvalidPasswordException.class, () -> {
+        assertThrows(InvalidPasswordException.class, () -> {
             var invalidHashedString = "123";
 
             Password.fromHashedString(invalidHashedString);
@@ -48,9 +53,9 @@ public class PasswordTest {
 
         var password = new Password(passwordString);
 
-        Assertions.assertTrue(password.compare(passwordString));
+        assertTrue(password.compare(passwordString));
 
-        Assertions.assertFalse(password.compare(wrongPasswordString));
+        assertFalse(password.compare(wrongPasswordString));
     }
 
     @Test
@@ -59,6 +64,6 @@ public class PasswordTest {
 
         var password = new Password(passwordString);
 
-        Assertions.assertNotNull(password.getPassword());
+        assertNotNull(password.getPasswordValue());
     }
 }

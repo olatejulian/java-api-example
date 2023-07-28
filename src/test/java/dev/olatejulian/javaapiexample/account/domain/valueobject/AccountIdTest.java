@@ -1,18 +1,23 @@
 package dev.olatejulian.javaapiexample.account.domain.valueobject;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.UUID;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import dev.olatejulian.javaapiexample.account.domain.exception.InvalidAccountIdException;
 
-public class AccountIdTest {
+class AccountIdTest {
     @Test
     void testConstructorWithValidValue() {
         var validValue = UUID.randomUUID().toString();
 
-        Assertions.assertDoesNotThrow(() -> {
+        assertDoesNotThrow(() -> {
             new AccountId(validValue);
         });
     }
@@ -21,21 +26,21 @@ public class AccountIdTest {
     void testConstructorWithInvalidValue() {
         var invalidValue = "invalid-value";
 
-        Assertions.assertThrows(InvalidAccountIdException.class, () -> {
+        assertThrows(InvalidAccountIdException.class, () -> {
             new AccountId(invalidValue);
         });
     }
 
     @Test
     void testGenerateId() {
-        Assertions.assertNotNull(AccountId.generateId());
+        assertNotNull(AccountId.generateId());
     }
 
     @Test
     void testGetId() {
         var accountId = AccountId.generateId();
 
-        Assertions.assertNotNull(accountId.getId());
+        assertNotNull(accountId.getId());
     }
 
     @Test
@@ -43,8 +48,12 @@ public class AccountIdTest {
         var accountId = AccountId.generateId();
         var anotherAccountId = AccountId.generateId();
 
-        Assertions.assertTrue(accountId.equals(accountId));
+        var sameValue = accountId.equals(accountId);
 
-        Assertions.assertFalse(accountId.equals(anotherAccountId));
+        assertTrue(sameValue);
+
+        var diffValue = accountId.equals(anotherAccountId);
+
+        assertFalse(diffValue);
     }
 }

@@ -7,30 +7,29 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import dev.olatejulian.javaapiexample.account.domain.exception.InvalidPasswordException;
 import lombok.Getter;
 
-public class Password {
+public final class Password {
     private static final Integer PASSWORD_MIN_LENGTH = 8;
 
     private static final Integer PASSWORD_MAX_LENGTH = 255;
 
     @Getter
-    private String password;
+    private String passwordValue;
 
     public Password(String password) throws InvalidPasswordException {
         validate(password);
 
-        this.password = hash(password);
+        this.passwordValue = hash(password);
     }
 
     private Password(HashedPassword hashedPassword) {
-        this.password = hashedPassword.getPassword();
+        this.passwordValue = hashedPassword.getPassword();
     }
 
-    public static Password fromHashedString(String password) throws InvalidPasswordException {
+    public static final Password fromHashedString(String password) throws InvalidPasswordException {
         var hashedPassword = HashedPassword.of(password);
 
-        if (hashedPassword == null) {
+        if (hashedPassword == null)
             throw new InvalidPasswordException("Hash does not match bcrypt regex");
-        }
 
         return new Password(hashedPassword);
     }
@@ -47,15 +46,15 @@ public class Password {
         return passwordEncoder.encode(password);
     }
 
-    public Boolean compare(String rawPassword) {
+    public final Boolean compare(String rawPassword) {
         var passwordEncoder = new BCryptPasswordEncoder();
 
-        return passwordEncoder.matches(rawPassword, this.password);
+        return passwordEncoder.matches(rawPassword, this.passwordValue);
     }
 }
 
-class HashedPassword {
-    private static final String BCRYPT_REGEX = "^\\$2[aby]\\$[0-9]{2}\\$[./0-9A-Za-z]{53}$";
+final class HashedPassword {
+    private static final String BCRYPT_REGEX = "^\\$2[aby]\\$\\d{2}\\$[./0-9A-Za-z]{53}$";
 
     @Getter
     private String password;
@@ -64,7 +63,7 @@ class HashedPassword {
         this.password = password;
     }
 
-    public static HashedPassword of(String password) {
+    public static final HashedPassword of(String password) {
         HashedPassword hashedPassword = null;
 
         if (validate(password)) {
