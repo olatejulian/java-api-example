@@ -11,7 +11,7 @@
 	<groupId>dev.olatejulian</groupId>
 	<artifactId>java-api-example</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>java-api-exampl</name>
+	<name>java-api-example</name>
 	<description>Java API example for learning purposes</description>
 	<properties>
 		<java.version>17</java.version>
@@ -56,6 +56,20 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
 		</dependency>
 	</dependencies>
 
