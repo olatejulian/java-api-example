@@ -5,15 +5,15 @@ import java.util.regex.Pattern;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import dev.olatejulian.javaapiexample.account.domain.exception.InvalidPasswordException;
-import lombok.Getter;
+import lombok.Value;
 
+@Value
 public final class Password {
     private static final Integer PASSWORD_MIN_LENGTH = 8;
 
     private static final Integer PASSWORD_MAX_LENGTH = 255;
 
-    @Getter
-    private String passwordValue;
+    private final String passwordValue;
 
     public Password(String password) throws InvalidPasswordException {
         validate(password);
@@ -53,11 +53,11 @@ public final class Password {
     }
 }
 
+@Value
 final class HashedPassword {
     private static final String BCRYPT_REGEX = "^\\$2[aby]\\$\\d{2}\\$[./0-9A-Za-z]{53}$";
 
-    @Getter
-    private String password;
+    private final String password;
 
     private HashedPassword(String password) {
         this.password = password;

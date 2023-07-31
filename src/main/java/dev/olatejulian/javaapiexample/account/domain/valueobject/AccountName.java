@@ -1,17 +1,15 @@
 package dev.olatejulian.javaapiexample.account.domain.valueobject;
 
 import dev.olatejulian.javaapiexample.account.domain.exception.InvalidAccountNameException;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Value;
 
-@EqualsAndHashCode
+@Value
 public final class AccountName {
     private static final Integer NAME_MIN_LENGTH = 3;
 
     private static final Integer NAME_MAX_LENGTH = 100;
 
-    @Getter
-    private String name;
+    private final String name;
 
     public AccountName(final String name) throws InvalidAccountNameException {
         validate(name);

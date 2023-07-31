@@ -1,15 +1,12 @@
 package dev.olatejulian.javaapiexample.shared.domain.valueobject;
 
+import dev.olatejulian.javaapiexample.shared.domain.exception.InvalidaEmailAddressException;
+import lombok.Value;
 import org.apache.commons.validator.routines.EmailValidator;
 
-import dev.olatejulian.javaapiexample.shared.domain.exception.InvalidaEmailAddressException;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-
-@EqualsAndHashCode
+@Value
 public class EmailAddress {
-    @Getter
-    private String address;
+    private final String address;
 
     public EmailAddress(String address) throws InvalidaEmailAddressException {
         validate(address);

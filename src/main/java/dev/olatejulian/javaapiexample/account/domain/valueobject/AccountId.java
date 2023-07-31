@@ -3,12 +3,10 @@ package dev.olatejulian.javaapiexample.account.domain.valueobject;
 import java.util.UUID;
 
 import dev.olatejulian.javaapiexample.account.domain.exception.InvalidAccountIdException;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.Value;
 
-@EqualsAndHashCode
+@Value
 public final class AccountId {
-    @Getter
     private final String id;
 
     public AccountId(final String id) throws InvalidAccountIdException {

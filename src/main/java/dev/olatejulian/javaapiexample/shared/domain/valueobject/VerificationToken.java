@@ -1,17 +1,14 @@
 package dev.olatejulian.javaapiexample.shared.domain.valueobject;
 
+import dev.olatejulian.javaapiexample.shared.domain.exception.InvalidVerificationTokenException;
+import lombok.Value;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import dev.olatejulian.javaapiexample.shared.domain.exception.InvalidVerificationTokenException;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-
-@EqualsAndHashCode
+@Value
 public class VerificationToken {
     private static final Integer VERIFICATION_TOKEN_LENGTH = 64;
 
-    @Getter
-    private String token;
+    private final String token;
 
     public VerificationToken(String token) throws InvalidVerificationTokenException {
         validate(token);
