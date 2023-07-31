@@ -16,20 +16,18 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
 public final class Account {
     private static final Integer VERIFICATION_TOKEN_EXPIRATION_TIME_IN_MINUTES = 15;
 
-    @Getter
     @NonNull
     private AccountId id;
 
-    @Getter
     @NonNull
     private AccountName name;
 
-    @Getter
     @NonNull
     private EmailAddress emailAddress;
 
@@ -57,7 +55,6 @@ public final class Account {
     @NonNull
     private LocalDateTime createdAt;
 
-    @Getter
     @NonNull
     private LocalDateTime updatedAt;
 
@@ -73,17 +70,17 @@ public final class Account {
                 LocalDateTime.now());
     }
 
-    public final void updateDateTime() {
+    public void updateDateTime() {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public final void changeName(final AccountName name) {
+    public void changeName(final AccountName name) {
         this.name = name;
 
         this.updateDateTime();
     }
 
-    public final void changeEmail(final EmailAddress emailAddress) {
+    public void changeEmail(final EmailAddress emailAddress) {
         this.emailAddress = emailAddress;
         this.emailAddressVerified = false;
         this.emailVerificationToken = null;
@@ -93,7 +90,7 @@ public final class Account {
         this.updateDateTime();
     }
 
-    public final VerificationToken generateEmailVerificationToken() {
+    public VerificationToken generateEmailVerificationToken() {
         this.emailVerificationToken = VerificationToken.generateVerificationToken();
 
         this.emailVerificationTokenSentAt = LocalDateTime.now();
@@ -103,7 +100,7 @@ public final class Account {
         return this.emailVerificationToken;
     }
 
-    public final void verifyEmail(final VerificationToken token) throws CannotVerifyAccountEmailException {
+    public void verifyEmail(final VerificationToken token) throws CannotVerifyAccountEmailException {
         var isEmailVerificationTokenNull = this.emailVerificationToken == null;
 
         var isEmailVerificationTokenSentAtNull = this.emailVerificationTokenSentAt == null;
@@ -130,11 +127,11 @@ public final class Account {
         this.updateDateTime();
     }
 
-    public final Boolean isEmailVerified() {
+    public Boolean isEmailVerified() {
         return (this.emailAddressVerified && this.emailVerificationToken == null && this.emailVerifiedAt != null);
     }
 
-    public final VerificationToken generatePasswordResetToken() {
+    public VerificationToken generatePasswordResetToken() {
         this.passwordResetToken = VerificationToken.generateVerificationToken();
 
         this.passwordResetTokenSentAt = LocalDateTime.now();
@@ -144,11 +141,11 @@ public final class Account {
         return this.passwordResetToken;
     }
 
-    public final Boolean comparePassword(final String rawPassword) {
+    public Boolean comparePassword(final String rawPassword) {
         return this.password.compare(rawPassword);
     }
 
-    public final void resetPassword(final Password password, final VerificationToken token)
+    public void resetPassword(final Password password, final VerificationToken token)
             throws CannotResetPasswordException {
         var isPasswordResetTokenNull = this.passwordResetToken == null;
 
@@ -174,7 +171,7 @@ public final class Account {
         this.updateDateTime();
     }
 
-    public final void activate() throws AccountEmailMustBeVerifiedException {
+    public void activate() throws AccountEmailMustBeVerifiedException {
         if (Boolean.FALSE.equals(this.isEmailVerified())) {
             throw new AccountEmailMustBeVerifiedException("Email must be verified before activating account");
         }
@@ -186,11 +183,11 @@ public final class Account {
         this.updateDateTime();
     }
 
-    public final Boolean isActivate() {
+    public Boolean isActivate() {
         return this.active && this.activatedAt != null;
     }
 
-    public final void deactivate() {
+    public void deactivate() {
         if (Boolean.FALSE.equals(this.isActivate()))
             return;
 
