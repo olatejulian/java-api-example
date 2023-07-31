@@ -25,21 +25,6 @@ import dev.olatejulian.javaapiexample.shared.domain.valueobject.EmailAddress;
 import dev.olatejulian.javaapiexample.shared.domain.valueobject.VerificationToken;
 
 public class AccountTest {
-    private static Account createRandomAccount() {
-        try {
-            var name = new AccountName(RandomStringUtils.randomAlphabetic(10));
-
-            var emailAddress = new EmailAddress(RandomStringUtils.randomAlphabetic(10).concat("@email.com"));
-
-            var password = new Password(RandomStringUtils.randomAlphanumeric(10));
-
-            return Account.create(name, emailAddress, password);
-
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
     @Test
     void testAccount() {
         assertDoesNotThrow(() -> {
@@ -66,7 +51,7 @@ public class AccountTest {
 
     @Test
     void testUpdateDateTime() {
-        var account = createRandomAccount();
+        var account = AccountUtils.createRandomAccount();
 
         var updatedAt = account.getUpdatedAt();
 
@@ -83,7 +68,7 @@ public class AccountTest {
     @Test
     void testChangeName() {
         assertDoesNotThrow(() -> {
-            var account = createRandomAccount();
+            var account = AccountUtils.createRandomAccount();
 
             var newName = new AccountName(RandomStringUtils.randomAlphabetic(10));
 
@@ -96,7 +81,7 @@ public class AccountTest {
     @Test
     void testChangeEmail() {
         assertDoesNotThrow(() -> {
-            var account = createRandomAccount();
+            var account = AccountUtils.createRandomAccount();
 
             var newEmailAddress = new EmailAddress("john.doe@email.com");
 
@@ -109,7 +94,7 @@ public class AccountTest {
     @Test
     void testGenerateEmailVerificationToken() {
         assertDoesNotThrow(() -> {
-            var account = createRandomAccount();
+            var account = AccountUtils.createRandomAccount();
 
             var emailVerificationToken = account.generateEmailVerificationToken();
 
@@ -120,7 +105,7 @@ public class AccountTest {
     @Test
     void testVerifyEmail() {
         assertDoesNotThrow(() -> {
-            var account = createRandomAccount();
+            var account = AccountUtils.createRandomAccount();
 
             var emailVerificationToken = account.generateEmailVerificationToken();
 
@@ -130,7 +115,7 @@ public class AccountTest {
 
     @Test
     void testVerifyEmailWhenTokenIsInvalid() {
-        var account = createRandomAccount();
+        var account = AccountUtils.createRandomAccount();
 
         account.generateEmailVerificationToken();
 
@@ -147,7 +132,7 @@ public class AccountTest {
 
     @Test
     void testIsEmailVerified() {
-        var account = createRandomAccount();
+        var account = AccountUtils.createRandomAccount();
 
         assertFalse(account.isEmailVerified());
 
@@ -163,7 +148,7 @@ public class AccountTest {
     @Test
     void testGeneratePasswordResetToken() {
         assertDoesNotThrow(() -> {
-            var account = createRandomAccount();
+            var account = AccountUtils.createRandomAccount();
 
             var passwordResetToken = account.generatePasswordResetToken();
 
@@ -174,7 +159,7 @@ public class AccountTest {
     @Test
     void testResetPassword() {
         assertDoesNotThrow(() -> {
-            var account = createRandomAccount();
+            var account = AccountUtils.createRandomAccount();
 
             var passwordResetToken = account.generatePasswordResetToken();
 
@@ -207,7 +192,7 @@ public class AccountTest {
     @Test
     void testResetPasswordWhenTokenIsInvalid() {
         assertThrows(CannotResetPasswordException.class, () -> {
-            var account = createRandomAccount();
+            var account = AccountUtils.createRandomAccount();
 
             account.generatePasswordResetToken();
 
@@ -226,7 +211,7 @@ public class AccountTest {
     @Test
     void testActivate() {
         assertDoesNotThrow(() -> {
-            var account = createRandomAccount();
+            var account = AccountUtils.createRandomAccount();
 
             var emailVerificationToken = account.generateEmailVerificationToken();
 
@@ -239,7 +224,7 @@ public class AccountTest {
     @Test
     void testActivateWhenEmailIsNotVerified() {
         assertThrows(AccountEmailMustBeVerifiedException.class, () -> {
-            var account = createRandomAccount();
+            var account = AccountUtils.createRandomAccount();
 
             account.activate();
         });
@@ -248,7 +233,7 @@ public class AccountTest {
     @Test
     void testDeactivate() {
         assertDoesNotThrow(() -> {
-            var account = createRandomAccount();
+            var account = AccountUtils.createRandomAccount();
 
             var emailVerificationToken = account.generateEmailVerificationToken();
 
