@@ -54,6 +54,6 @@ class EmailAddressTest {
 
         var emailAddress = new EmailAddress(emailAddressString);
 
-        assertEquals(emailAddressString, emailAddress.getAddress());
+        assertEquals(emailAddressString, emailAddress.getValue());
     }
 }

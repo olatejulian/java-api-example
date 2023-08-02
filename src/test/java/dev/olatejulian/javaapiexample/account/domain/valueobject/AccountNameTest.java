@@ -32,7 +32,7 @@ class AccountNameTest {
 
         var value = new AccountName(name);
 
-        assertEquals(name, value.getName());
+        assertEquals(name, value.getValue());
     }
 
     @Test

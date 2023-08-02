@@ -7,26 +7,29 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Locale;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 
 import dev.olatejulian.javaapiexample.shared.domain.exception.InvalidVerificationTokenException;
 
 class VerificationTokenTest {
-    private static final Integer VERIFICATION_TOKEN_LENGTH = 64;
+    private static final int VERIFICATION_TOKEN_LENGTH = 64;
 
     @Test
     void testVerificationToken() {
         var validValue = RandomStringUtils.randomAlphanumeric(VERIFICATION_TOKEN_LENGTH);
 
-        assertDoesNotThrow(() -> new VerificationToken(validValue));
+        assertDoesNotThrow(() -> new VerificationToken(validValue, Locale.getDefault()));
     }
 
     @Test
     void testVerificationTokenWhenIsInvalid() {
         var invalidValue = "invalid-value";
 
-        assertThrows(InvalidVerificationTokenException.class, () -> new VerificationToken(invalidValue));
+        assertThrows(InvalidVerificationTokenException.class,
+                () -> new VerificationToken(invalidValue, Locale.getDefault()));
     }
 
     @Test
@@ -55,8 +58,8 @@ class VerificationTokenTest {
     void testGetVerificationToken() {
         var verificationToken = VerificationToken.generateVerificationToken();
 
-        assertNotNull(verificationToken.getToken());
+        assertNotNull(verificationToken.getValue());
 
-        assertEquals(64, verificationToken.getToken().length());
+        assertEquals(VERIFICATION_TOKEN_LENGTH, verificationToken.getValue().length());
     }
 }

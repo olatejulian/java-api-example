@@ -13,7 +13,7 @@ import dev.olatejulian.javaapiexample.account.domain.exception.InvalidPasswordEx
 class PasswordTest {
     @Test
     void testPassword() {
-        var validValue = "JohnDoePassword123";
+        var validValue = "JohnDoePassword123%&";
 
         assertDoesNotThrow(() -> new Password(validValue));
     }
@@ -28,7 +28,7 @@ class PasswordTest {
     @Test
     void testFromHashedString() {
         assertDoesNotThrow(() -> {
-            var hashedString = new Password("JohnDoePassword123").getPasswordValue();
+            var hashedString = new Password("JohnDoePassword123%&").getValue();
 
             Password.fromHashedString(hashedString);
         });
@@ -47,9 +47,9 @@ class PasswordTest {
 
     @Test
     void testCompare() throws InvalidPasswordException {
-        var passwordString = "JohnDoePassword123";
+        var passwordString = "JohnDoePassword123%&";
 
-        var wrongPasswordString = "JohnDoePassword1234";
+        var wrongPasswordString = "JDpwd123%&";
 
         var password = new Password(passwordString);
 
@@ -60,10 +60,10 @@ class PasswordTest {
 
     @Test
     void testGetPassword() throws InvalidPasswordException {
-        var passwordString = "JohnDoePassword123";
+        var passwordString = "JohnDoePassword123%&";
 
         var password = new Password(passwordString);
 
-        assertNotNull(password.getPasswordValue());
+        assertNotNull(password.getValue());
     }
 }

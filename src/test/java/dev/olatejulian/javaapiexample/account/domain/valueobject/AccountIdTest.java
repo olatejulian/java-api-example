@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Locale;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,7 @@ class AccountIdTest {
         var validValue = UUID.randomUUID().toString();
 
         assertDoesNotThrow(() -> {
-            new AccountId(validValue);
+            new AccountId(validValue, Locale.getDefault());
         });
     }
 
@@ -27,7 +28,7 @@ class AccountIdTest {
         var invalidValue = "invalid-value";
 
         assertThrows(InvalidAccountIdException.class, () -> {
-            new AccountId(invalidValue);
+            new AccountId(invalidValue, Locale.getDefault());
         });
     }
 
@@ -40,7 +41,7 @@ class AccountIdTest {
     void testGetId() {
         var accountId = AccountId.generateId();
 
-        assertNotNull(accountId.getId());
+        assertNotNull(accountId.getValue());
     }
 
     @Test
