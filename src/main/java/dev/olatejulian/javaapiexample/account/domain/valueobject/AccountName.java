@@ -1,39 +1,49 @@
 package dev.olatejulian.javaapiexample.account.domain.valueobject;
 
+import java.util.Locale;
+
 import dev.olatejulian.javaapiexample.account.domain.exception.InvalidAccountNameException;
+import dev.olatejulian.javaapiexample.shared.common.CustomExceptionMessages;
 import lombok.Value;
 
 @Value
 public final class AccountName {
-    private static final Integer NAME_MIN_LENGTH = 3;
+    private static final String NAME_MUST_BE_LONGER_THAN_X_CHARACTERS = "account.account_name.name_must_be_longer_than_x_characters";
 
-    private static final Integer NAME_MAX_LENGTH = 100;
+    private static final String NAME_MUST_BE_SHORTER_THAN_X_CHARACTERS = "account.account_name.name_must_be_shorter_than_x_characters";
 
-    private final String name;
+    private static final int NAME_MIN_LENGTH = 3;
 
-    public AccountName(final String name) throws InvalidAccountNameException {
-        validate(name);
+    private static final int NAME_MAX_LENGTH = 100;
 
-        this.name = name;
+    private final String value;
+
+    public AccountName(String name, Locale locale) throws InvalidAccountNameException {
+        validate(name, locale);
+
+        this.value = name;
     }
 
-    private static void validate(final String name) throws InvalidAccountNameException {
-        Object[][] errors = {
-                {
-                        name == null || name.length() <= NAME_MIN_LENGTH,
-                        String.format("Account name must be longer than %d characters", NAME_MIN_LENGTH)
-                },
-                {
-                        name == null || name.length() > NAME_MAX_LENGTH,
-                        String.format("Account name cannot be longer than %d characters", NAME_MAX_LENGTH)
-                }
-        };
+    public AccountName(String name) throws InvalidAccountNameException {
+        this(name, Locale.getDefault());
+    }
 
-        for (Object[] error : errors) {
-            if ((boolean) error[0]) {
-                throw new InvalidAccountNameException((String) error[1]);
-            }
+    private static void validate(String name, Locale locale) throws InvalidAccountNameException {
+        if (name == null || name.length() <= NAME_MIN_LENGTH) {
+            var message = String.format(
+                    CustomExceptionMessages.getMessage(NAME_MUST_BE_LONGER_THAN_X_CHARACTERS, locale),
+                    NAME_MIN_LENGTH);
+
+            throw new InvalidAccountNameException(message);
         }
-    }
 
+        if (name.length() > NAME_MAX_LENGTH) {
+            var message = String.format(
+                    CustomExceptionMessages.getMessage(NAME_MUST_BE_SHORTER_THAN_X_CHARACTERS, locale),
+                    NAME_MAX_LENGTH);
+
+            throw new InvalidAccountNameException(message);
+        }
+
+    }
 }
