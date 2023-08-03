@@ -24,7 +24,7 @@ import dev.olatejulian.javaapiexample.account.domain.valueobject.Password;
 import dev.olatejulian.javaapiexample.shared.domain.valueobject.EmailAddress;
 import dev.olatejulian.javaapiexample.shared.domain.valueobject.VerificationToken;
 
-public class AccountTest {
+class AccountTest {
     @Test
     void testAccount() {
         assertDoesNotThrow(() -> {
@@ -33,7 +33,7 @@ public class AccountTest {
                     new AccountName("John Doe"),
                     new EmailAddress("john.doe@email.com"),
                     false,
-                    new Password("JoeDoePassword"),
+                    new Password("JoeDoePassword@1"),
                     false,
                     LocalDateTime.now(),
                     LocalDateTime.now());
@@ -45,7 +45,7 @@ public class AccountTest {
         Assertions
                 .assertDoesNotThrow(
                         () -> Account.create(new AccountName("John Doe"), new EmailAddress("john.doe@email.com"),
-                                new Password("JoeDoePassword")));
+                                new Password("JoeDoePassword@1")));
 
     }
 
@@ -163,7 +163,7 @@ public class AccountTest {
 
             var passwordResetToken = account.generatePasswordResetToken();
 
-            var stringNewPassword = "newPassword";
+            var stringNewPassword = "newPassword1@";
 
             var newPassword = new Password(stringNewPassword);
 
@@ -178,7 +178,7 @@ public class AccountTest {
     @Test
     void testComparePassword() {
         assertDoesNotThrow(() -> {
-            var passwordString = "password";
+            var passwordString = "passwordA1@";
 
             var account = Account.create(new AccountName("John Doe"), new EmailAddress("john.doe@email.com"),
                     new Password(passwordString));
@@ -196,7 +196,7 @@ public class AccountTest {
 
             account.generatePasswordResetToken();
 
-            var stringNewPassword = "newPassword";
+            var stringNewPassword = "newPassword1@";
 
             var newPassword = new Password(stringNewPassword);
 
@@ -244,5 +244,4 @@ public class AccountTest {
             account.deactivate();
         });
     }
-
 }
