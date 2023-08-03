@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 public final class CustomExceptionMessages {
     private static final String BUNDLE_NAME = "messages";
+    private static final String DEFAULT_LOCALE = "en_US";
 
     private static final ResourceBundle.Control UTF8_CONTROL = new UTF8Control();
 
@@ -26,7 +27,13 @@ public final class CustomExceptionMessages {
         public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader,
                 boolean reload)
                 throws IllegalAccessException, InstantiationException, IOException {
-            var bundleName = toBundleName(baseName, locale);
+            String bundleName;
+
+            try {
+                bundleName = toBundleName(baseName, locale);
+            } catch (Exception e) {
+                bundleName = toBundleName(baseName, new Locale(DEFAULT_LOCALE));
+            }
 
             var resourceName = toResourceName(bundleName, "properties");
 
