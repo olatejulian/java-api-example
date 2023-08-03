@@ -2,6 +2,7 @@ package dev.olatejulian.javaapiexample.account.domain;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Locale;
 
 import dev.olatejulian.javaapiexample.account.domain.exception.AccountEmailMustBeVerifiedException;
 import dev.olatejulian.javaapiexample.account.domain.exception.CannotResetPasswordException;
@@ -9,21 +10,47 @@ import dev.olatejulian.javaapiexample.account.domain.exception.CannotVerifyAccou
 import dev.olatejulian.javaapiexample.account.domain.valueobject.AccountId;
 import dev.olatejulian.javaapiexample.account.domain.valueobject.AccountName;
 import dev.olatejulian.javaapiexample.account.domain.valueobject.Password;
+import dev.olatejulian.javaapiexample.shared.common.CustomExceptionMessages;
 import dev.olatejulian.javaapiexample.shared.domain.valueobject.EmailAddress;
 import dev.olatejulian.javaapiexample.shared.domain.valueobject.VerificationToken;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @AllArgsConstructor
 @RequiredArgsConstructor
 public final class Account {
-    private static final Integer VERIFICATION_TOKEN_EXPIRATION_TIME_IN_MINUTES = 15;
+    private static final String EMAIL_ADDRESS_ALREADY_VERIFIED = "account.email_address_already_verified";
+
+    private static final String THERE_IS_NO_TOKEN_TO_VERIFY = "account.there_is_no_token_to_verify";
+
+    private static final String INVALID_TOKEN_OR_TOKEN_HAS_EXPIRED = "account.invalid_token_or_token_has_expired";
+
+    private static final String ACCOUNT_EMAIL_MUST_BE_VERIFIED = "account.account_email_must_be_verified";
+
+    private static final int VERIFICATION_TOKEN_EXPIRATION_TIME_IN_MINUTES = 15;
+
+    public static Account create(final AccountName name, final EmailAddress emailAddress, final Password password) {
+        var account = new Account(
+                AccountId.generateId(),
+                name,
+                emailAddress,
+                false,
+                password,
+                false,
+                LocalDateTime.now(),
+                LocalDateTime.now());
+
+        account.setLocale(Locale.getDefault());
+
+        return account;
+    }
 
     @NonNull
-    private AccountId id;
+    private final AccountId id;
 
     @NonNull
     private AccountName name;
@@ -53,22 +80,13 @@ public final class Account {
     private LocalDateTime activatedAt;
 
     @NonNull
-    private LocalDateTime createdAt;
+    private final LocalDateTime createdAt;
 
     @NonNull
     private LocalDateTime updatedAt;
 
-    public static Account create(final AccountName name, final EmailAddress emailAddress, final Password password) {
-        return new Account(
-                AccountId.generateId(),
-                name,
-                emailAddress,
-                false,
-                password,
-                false,
-                LocalDateTime.now(),
-                LocalDateTime.now());
-    }
+    @Setter
+    private Locale locale;
 
     public void updateDateTime() {
         this.updatedAt = LocalDateTime.now();
@@ -100,13 +118,25 @@ public final class Account {
         return this.emailVerificationToken;
     }
 
+    public boolean isEmailVerified() {
+        return (this.emailAddressVerified && this.emailVerificationToken == null && this.emailVerifiedAt != null);
+    }
+
     public void verifyEmail(final VerificationToken token) throws CannotVerifyAccountEmailException {
+        if (this.isEmailVerified()) {
+            var message = CustomExceptionMessages.getMessage(EMAIL_ADDRESS_ALREADY_VERIFIED, this.locale);
+
+            throw new CannotVerifyAccountEmailException(message);
+        }
+
         var isEmailVerificationTokenNull = this.emailVerificationToken == null;
 
         var isEmailVerificationTokenSentAtNull = this.emailVerificationTokenSentAt == null;
 
         if (isEmailVerificationTokenNull || isEmailVerificationTokenSentAtNull) {
-            throw new CannotVerifyAccountEmailException("There is no verification token to verify");
+            var message = CustomExceptionMessages.getMessage(THERE_IS_NO_TOKEN_TO_VERIFY, this.locale);
+
+            throw new CannotVerifyAccountEmailException(message);
         }
 
         var isEmailVerificationTokenExpired = Duration.between(this.emailVerificationTokenSentAt,
@@ -115,7 +145,9 @@ public final class Account {
         var isEmailVerificationTokenTheSame = this.emailVerificationToken.equals(token);
 
         if (isEmailVerificationTokenExpired || !isEmailVerificationTokenTheSame) {
-            throw new CannotVerifyAccountEmailException("Invalid verification token");
+            var message = CustomExceptionMessages.getMessage(INVALID_TOKEN_OR_TOKEN_HAS_EXPIRED, locale);
+
+            throw new CannotVerifyAccountEmailException(message);
         }
 
         this.emailAddressVerified = true;
@@ -125,10 +157,6 @@ public final class Account {
         this.emailVerifiedAt = LocalDateTime.now();
 
         this.updateDateTime();
-    }
-
-    public Boolean isEmailVerified() {
-        return (this.emailAddressVerified && this.emailVerificationToken == null && this.emailVerifiedAt != null);
     }
 
     public VerificationToken generatePasswordResetToken() {
@@ -141,7 +169,7 @@ public final class Account {
         return this.passwordResetToken;
     }
 
-    public Boolean comparePassword(final String rawPassword) {
+    public boolean comparePassword(final String rawPassword) {
         return this.password.compare(rawPassword);
     }
 
@@ -152,7 +180,9 @@ public final class Account {
         var isPasswordResetTokenSentAtNull = this.passwordResetTokenSentAt == null;
 
         if (isPasswordResetTokenNull || isPasswordResetTokenSentAtNull) {
-            throw new CannotResetPasswordException("There is no reset token to reset password");
+            var message = CustomExceptionMessages.getMessage(THERE_IS_NO_TOKEN_TO_VERIFY, this.locale);
+
+            throw new CannotResetPasswordException(message);
         }
 
         var isPasswordResetTokenExpired = Duration.between(this.passwordResetTokenSentAt, LocalDateTime.now())
@@ -161,7 +191,9 @@ public final class Account {
         var isPasswordResetTokenTheSame = this.passwordResetToken.equals(token);
 
         if (isPasswordResetTokenExpired || !isPasswordResetTokenTheSame) {
-            throw new CannotResetPasswordException("Invalid reset token");
+            var message = CustomExceptionMessages.getMessage(INVALID_TOKEN_OR_TOKEN_HAS_EXPIRED, locale);
+
+            throw new CannotResetPasswordException(message);
         }
 
         this.password = password;
@@ -173,7 +205,9 @@ public final class Account {
 
     public void activate() throws AccountEmailMustBeVerifiedException {
         if (Boolean.FALSE.equals(this.isEmailVerified())) {
-            throw new AccountEmailMustBeVerifiedException("Email must be verified before activating account");
+            var message = CustomExceptionMessages.getMessage(ACCOUNT_EMAIL_MUST_BE_VERIFIED, this.locale);
+
+            throw new AccountEmailMustBeVerifiedException(message);
         }
 
         this.active = true;
@@ -183,7 +217,7 @@ public final class Account {
         this.updateDateTime();
     }
 
-    public Boolean isActivate() {
+    public boolean isActivate() {
         return this.active && this.activatedAt != null;
     }
 
