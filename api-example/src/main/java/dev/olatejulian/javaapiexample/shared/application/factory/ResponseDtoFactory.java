@@ -2,7 +2,7 @@ package dev.olatejulian.javaapiexample.shared.application.factory;
 
 import dev.olatejulian.javaapiexample.shared.application.dto.ResponseDto;
 
-public class ResponseDtoFactory {
+public final class ResponseDtoFactory {
     public static <D, E> ResponseDto<D, E> success(D data) {
         return new ResponseDto<>(true, data, null);
     }

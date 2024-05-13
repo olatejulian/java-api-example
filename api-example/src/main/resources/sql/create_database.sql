@@ -1,0 +1,1 @@
+CREATE DATABASE java_api_example;

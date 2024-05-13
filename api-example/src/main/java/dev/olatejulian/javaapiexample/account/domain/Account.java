@@ -33,7 +33,7 @@ public final class Account {
 
     private static final int VERIFICATION_TOKEN_EXPIRATION_TIME_IN_MINUTES = 15;
 
-    public static Account create(final AccountName name, final EmailAddress emailAddress, final Password password) {
+    public static @NonNull Account create(final AccountName name, final EmailAddress emailAddress, final Password password) {
         var account = new Account(
                 AccountId.generateId(),
                 name,
