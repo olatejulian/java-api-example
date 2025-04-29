@@ -58,8 +58,7 @@ public final class Password {
 
     private static void validate(String password, Locale locale) throws InvalidPasswordException {
         if (password == null || password.length() <= PASSWORD_MIN_LENGTH) {
-            var message = String.format(
-                    CustomExceptionMessages.getMessage(PASSWORD_MUST_BE_LONGER_THAN_X_CHARACTERS, locale),
+            var message = CustomExceptionMessages.getMessage(PASSWORD_MUST_BE_LONGER_THAN_X_CHARACTERS, locale).formatted(
                     PASSWORD_MIN_LENGTH);
 
             throw new InvalidPasswordException(message);

@@ -30,16 +30,14 @@ public final class AccountName {
 
     private static void validate(String name, Locale locale) throws InvalidAccountNameException {
         if (name == null || name.length() <= NAME_MIN_LENGTH) {
-            var message = String.format(
-                    CustomExceptionMessages.getMessage(NAME_MUST_BE_LONGER_THAN_X_CHARACTERS, locale),
+            var message = CustomExceptionMessages.getMessage(NAME_MUST_BE_LONGER_THAN_X_CHARACTERS, locale).formatted(
                     NAME_MIN_LENGTH);
 
             throw new InvalidAccountNameException(message);
         }
 
         if (name.length() > NAME_MAX_LENGTH) {
-            var message = String.format(
-                    CustomExceptionMessages.getMessage(NAME_MUST_BE_SHORTER_THAN_X_CHARACTERS, locale),
+            var message = CustomExceptionMessages.getMessage(NAME_MUST_BE_SHORTER_THAN_X_CHARACTERS, locale).formatted(
                     NAME_MAX_LENGTH);
 
             throw new InvalidAccountNameException(message);

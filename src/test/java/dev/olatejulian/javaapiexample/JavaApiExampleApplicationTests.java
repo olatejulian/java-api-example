@@ -106,16 +106,16 @@ class JavaApiExampleApplicationTests {
 
 		var PASSWORD_MIN_LENGTH = 8;
 
-		var invalidAccountNameExceptionMessage = String.format(CustomExceptionMessages
-				.getMessage("account.account_name.name_must_be_longer_than_x_characters", Locale.getDefault()),
-				NAME_MIN_LENGTH);
+		var invalidAccountNameExceptionMessage = CustomExceptionMessages
+                .getMessage("account.account_name.name_must_be_longer_than_x_characters", Locale.getDefault()).formatted(
+                NAME_MIN_LENGTH);
 
 		var invalidEmailAddressExceptionMessage = CustomExceptionMessages
 				.getMessage("shared.email_address.invalid_format", Locale.getDefault());
 
-		var invalidPasswordExceptionMessage = String.format(CustomExceptionMessages
-				.getMessage("account.password.password_must_be_longer_than_x_characters", Locale.getDefault()),
-				PASSWORD_MIN_LENGTH);
+		var invalidPasswordExceptionMessage = CustomExceptionMessages
+                .getMessage("account.password.password_must_be_longer_than_x_characters", Locale.getDefault()).formatted(
+                PASSWORD_MIN_LENGTH);
 
 		var listOfResponseErrorDto = List.of(
 				new ResponseErrorDto(InvalidAccountNameException.class.getSimpleName(),

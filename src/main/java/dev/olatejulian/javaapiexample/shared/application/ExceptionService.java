@@ -49,7 +49,7 @@ public final class ExceptionService {
     }
 
     private static String getComposeExceptionMessage(List<Exception> exceptions) {
-        return exceptions.stream().map(exception -> String.format("%s: %s%n",
+        return exceptions.stream().map(exception -> "%s: %s%n".formatted(
                 exception.getClass().getSimpleName(), exception.getMessage())).reduce("", String::concat);
     }
 

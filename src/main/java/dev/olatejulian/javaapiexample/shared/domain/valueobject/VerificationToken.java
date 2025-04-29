@@ -39,7 +39,7 @@ public class VerificationToken {
 
     private static void validate(String token, Locale locale) throws InvalidVerificationTokenException {
         if (token == null || token.length() != VERIFICATION_TOKEN_LENGTH) {
-            var message = String.format(CustomExceptionMessages.getMessage(TOKEN_MUST_HAVE_X_CHARACTERS, locale),
+            var message = CustomExceptionMessages.getMessage(TOKEN_MUST_HAVE_X_CHARACTERS, locale).formatted(
                     VERIFICATION_TOKEN_LENGTH);
 
             throw new InvalidVerificationTokenException(message);
